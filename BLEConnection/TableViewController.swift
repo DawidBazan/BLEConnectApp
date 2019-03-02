@@ -42,8 +42,10 @@ class TableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        
+        bluetooth.connectDevice(device: discoveredPeripherals[indexPath.row])
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "deviceInfo") as! DeviceInfoVC
+        vc.selectedDevice = discoveredPeripherals[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -52,6 +54,9 @@ extension TableViewController: DBBluetoothDelegate {
     func bluetoothDidDiscoverPeripheral(_ peripheral: CBPeripheral) {
         if !discoveredPeripherals.contains(peripheral) {
             discoveredPeripherals.append(peripheral)
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
 }

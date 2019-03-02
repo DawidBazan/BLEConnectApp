@@ -121,6 +121,7 @@ extension BluetoothHandler: CBCentralManagerDelegate, CBPeripheralDelegate {
         for characteristic in service.characteristics! {
            
             peripheral.setNotifyValue(true, for: characteristic)
+            peripheral.readValue(for: characteristic)
             delegate?.bluetoothDidDiscoverCharacteristic?(characteristic)
             peripheral.discoverDescriptors(for: characteristic)
         }
